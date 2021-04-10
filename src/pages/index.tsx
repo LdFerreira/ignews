@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import Head from "next/head";
 import styles from './home.module.scss'
 import {SubscribeButton} from "../components/SubsscribeButton";
@@ -16,16 +16,15 @@ export default function Home({product}: HomeProps) {
   return (
     <>
       <Head>
-        <title>Home | ig.news</title>
+        <title>Inicio | ig.news</title>
       </Head>
 
       <main className={styles.contentContainer}>
         <section className={styles.hero}>
-          <span>👏 Hey, welcome</span>
-          <h1>News about the <span>React</span> world.</h1>
-          <p>
-            Get access to all the publications <br/>
-            <span>for {product.amount} month</span>
+          <span>👏 Ola, bem-vindo</span>
+          <h1>Notícias sobre o mundo <span>React</span></h1>
+          <p>Tenha acesso a todas as publicações<br/>
+            <span>por {product.amount}/mês</span>
           </p>
           <SubscribeButton priceId={product.priceId}/>
         </section>
@@ -36,7 +35,7 @@ export default function Home({product}: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const price = await stripe.prices.retrieve('price_1IeV8yJpViHnoU3v9zPrXXsW');
 
   const product = {
@@ -49,7 +48,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       product
-    }
+    },
+    revalidate: 60 * 60 * 24, //24 hours
 
   }
 }
